@@ -129,6 +129,9 @@ public class USBPrinterAdapter implements PrinterAdapter {
             mUsbDeviceConnection.close();
             mUsbInterface = null;
             mEndPoint = null;
+            if (mUsbDevice != null) {
+                mUsbDevice = null;
+            }
             mUsbDeviceConnection = null;
         }
     }
@@ -190,6 +193,9 @@ public class USBPrinterAdapter implements PrinterAdapter {
             mUsbStampInterface = null;
             mStampEndPoint = null;
             mUsbStampConnection = null;
+            if (mUsbDevice != null) {
+                mUsbDevice = null;
+            }
         }
     }
 
@@ -532,7 +538,6 @@ public class USBPrinterAdapter implements PrinterAdapter {
 
             mUsbDeviceConnection.bulkTransfer(mEndPoint, SET_LINE_SPACE_32, SET_LINE_SPACE_32.length, 100000);
             mUsbDeviceConnection.bulkTransfer(mEndPoint, LINE_FEED, LINE_FEED.length, 100000);
-            closeConnectionIfExists();
         } else {
             String msg = "failed to connected to device";
             Log.v(LOG_TAG, msg);
