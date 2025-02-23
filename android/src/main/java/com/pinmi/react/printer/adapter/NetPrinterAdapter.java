@@ -380,7 +380,6 @@ public class NetPrinterAdapter implements PrinterAdapter {
                     OutputStream printerOutputStream = socket.getOutputStream();
                     printerOutputStream.write(tosend);
                     printerOutputStream.flush();
-                    closeConnectionStampIfExists();
                 } catch (IOException e) {
                     Log.e(LOG_TAG, "failed to print label");
                     e.printStackTrace();

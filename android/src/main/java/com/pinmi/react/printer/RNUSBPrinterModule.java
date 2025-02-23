@@ -48,6 +48,12 @@ public class RNUSBPrinterModule extends ReactContextBaseJavaModule implements RN
 
     @ReactMethod
     @Override
+    public void closeConnectionStampIfExists()  {
+        adapter.closeConnectionStampIfExists();
+    }
+
+    @ReactMethod
+    @Override
     public void getDeviceList(Callback successCallback, Callback errorCallback)  {
         List<PrinterDevice> printerDevices = adapter.getDeviceList(errorCallback);
         WritableArray pairedDeviceList = Arguments.createArray();

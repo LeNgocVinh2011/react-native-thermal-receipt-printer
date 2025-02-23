@@ -47,6 +47,12 @@ public class RNBLEPrinterModule extends ReactContextBaseJavaModule implements RN
         adapter.closeConnectionIfExists();
     }
 
+   @ReactMethod
+    @Override
+    public void closeConnectionStampIfExists()  {
+        adapter.closeConnectionIfExists();
+    }
+
     @ReactMethod
     @Override
     public void getDeviceList(Callback successCallback, Callback errorCallback)  {

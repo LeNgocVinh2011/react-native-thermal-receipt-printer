@@ -488,7 +488,6 @@ public class USBPrinterAdapter implements PrinterAdapter {
 
                     int b = mUsbStampConnection.bulkTransfer(mStampEndPoint, tosend, tosend.length, 100000);
                     Log.i(LOG_TAG, "Return Status: b-->" + b);
-                    closeConnectionStampIfExists();
                 }
             }).start();
         } else {

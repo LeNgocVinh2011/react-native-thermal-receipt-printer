@@ -27,6 +27,8 @@ public interface RNPrinterModule {
 
     public void closeConn();
 
+    public void closeConnectionStampIfExists();
+
     public void getDeviceList(Callback successCallback, Callback errorCallback);
 
     @ReactMethod

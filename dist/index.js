@@ -84,6 +84,12 @@ export var USBPrinter = {
             resolve();
         });
     },
+    closeConnectionStampIfExists: function () {
+        return new Promise(function (resolve) {
+            RNUSBPrinter.closeConnectionStampIfExists();
+            resolve();
+        });
+    },
     printText: function (text, opts) {
         if (opts === void 0) { opts = {}; }
         return RNUSBPrinter.printRawData(textTo64Buffer(text, opts), function (error) {
@@ -232,6 +238,12 @@ export var NetPrinter = {
     closeConn: function () {
         return new Promise(function (resolve) {
             RNNetPrinter.closeConn();
+            resolve();
+        });
+    },
+    closeConnectionStampIfExists: function () {
+        return new Promise(function (resolve) {
+            RNNetPrinter.closeConnectionStampIfExists();
             resolve();
         });
     },
