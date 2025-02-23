@@ -68,6 +68,7 @@ export declare const USBPrinter: {
     connectPrinter: (vendorId: string, productId: string) => Promise<IUSBPrinter>;
     connectStampPrinter: (vendorId: string, productId: string) => Promise<IUSBPrinter>;
     closeConn: () => Promise<void>;
+    closeConnectionStampIfExists: () => Promise<void>;
     printText: (text: string, opts?: PrinterOptions) => void;
     printBill: (text: string, opts?: PrinterOptions) => void;
     printImage: (imgUrl: string, opts?: {}) => void;
@@ -91,6 +92,7 @@ export declare const NetPrinter: {
     connectPrinter: (host: string, port: number) => Promise<INetPrinter>;
     connectStampPrinter: (host: string, port: number) => Promise<INetPrinter>;
     closeConn: () => Promise<void>;
+    closeConnectionStampIfExists: () => Promise<void>;
     printText: (text: string, opts?: {}) => void;
     printBill: (text: string, opts?: {}) => void;
     printImage: (imgUrl: string, opts?: {}) => void;
