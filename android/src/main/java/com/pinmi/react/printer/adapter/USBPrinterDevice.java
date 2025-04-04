@@ -14,7 +14,7 @@ public class USBPrinterDevice implements PrinterDevice{
     private USBPrinterDeviceId usbPrinterDeviceId;
 
     public USBPrinterDevice(UsbDevice device) {
-        this.usbPrinterDeviceId = USBPrinterDeviceId.valueOf(device.getVendorId(), device.getProductId());
+        this.usbPrinterDeviceId = USBPrinterDeviceId.valueOf(device.getVendorId(), device.getProductId(), device.getDeviceId());
         this.mDevice = device;
     }
 
@@ -37,5 +37,4 @@ public class USBPrinterDevice implements PrinterDevice{
         deviceMap.putInt("product_id", this.mDevice.getProductId());
         return deviceMap;
     }
-
 }

@@ -157,7 +157,7 @@ public class USBPrinterAdapter implements PrinterAdapter {
         }
 
         USBPrinterDeviceId usbPrinterDeviceId = (USBPrinterDeviceId) printerDeviceId;
-        if (mUsbDevice != null && mUsbDevice.getVendorId() == usbPrinterDeviceId.getVendorId() && mUsbDevice.getProductId() == usbPrinterDeviceId.getProductId()) {
+        if (mUsbDevice != null && mUsbDevice.getVendorId() == usbPrinterDeviceId.getVendorId() && mUsbDevice.getProductId() == usbPrinterDeviceId.getProductId() && mUsbDevice.getDeviceId() == usbPrinterDeviceId.getDeviceId()) {
             Log.i(LOG_TAG, "already selected device, do not need repeat to connect");
             if(!mUSBManager.hasPermission(mUsbDevice)){
                 closeConnectionStampIfExists();
@@ -172,7 +172,7 @@ public class USBPrinterAdapter implements PrinterAdapter {
             return;
         }
         for (UsbDevice usbDevice : mUSBManager.getDeviceList().values()) {
-            if (usbDevice.getVendorId() == usbPrinterDeviceId.getVendorId() && usbDevice.getProductId() == usbPrinterDeviceId.getProductId()) {
+            if (usbDevice.getVendorId() == usbPrinterDeviceId.getVendorId() && usbDevice.getProductId() == usbPrinterDeviceId.getProductId() && usbDevice.getDeviceId() == usbPrinterDeviceId.getDeviceId()) {
                 Log.v(LOG_TAG, "request for device: vendor_id: " + usbPrinterDeviceId.getVendorId() + ", product_id: " + usbPrinterDeviceId.getProductId());
                 closeConnectionStampIfExists();
                 mUSBManager.requestPermission(usbDevice, mPermissionIndent);
@@ -249,7 +249,7 @@ public class USBPrinterAdapter implements PrinterAdapter {
         }
 
         USBPrinterDeviceId usbPrinterDeviceId = (USBPrinterDeviceId) printerDeviceId;
-        if (mUsbDevice != null && mUsbDevice.getVendorId() == usbPrinterDeviceId.getVendorId() && mUsbDevice.getProductId() == usbPrinterDeviceId.getProductId()) {
+        if (mUsbDevice != null && mUsbDevice.getVendorId() == usbPrinterDeviceId.getVendorId() && mUsbDevice.getProductId() == usbPrinterDeviceId.getProductId() && mUsbDevice.getDeviceId() == usbPrinterDeviceId.getDeviceId()) {
             Log.i(LOG_TAG, "already selected device, do not need repeat to connect");
             if(!mUSBManager.hasPermission(mUsbDevice)){
                 closeConnectionIfExists();
@@ -264,7 +264,7 @@ public class USBPrinterAdapter implements PrinterAdapter {
             return;
         }
         for (UsbDevice usbDevice : mUSBManager.getDeviceList().values()) {
-            if (usbDevice.getVendorId() == usbPrinterDeviceId.getVendorId() && usbDevice.getProductId() == usbPrinterDeviceId.getProductId()) {
+            if (usbDevice.getVendorId() == usbPrinterDeviceId.getVendorId() && usbDevice.getProductId() == usbPrinterDeviceId.getProductId() && usbDevice.getDeviceId() == usbPrinterDeviceId.getDeviceId()) {
                 Log.v(LOG_TAG, "request for device: vendor_id: " + usbPrinterDeviceId.getVendorId() + ", product_id: " + usbPrinterDeviceId.getProductId());
                 closeConnectionIfExists();
                 mUSBManager.requestPermission(usbDevice, mPermissionIndent);

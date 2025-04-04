@@ -8,6 +8,7 @@ public class USBPrinterDeviceId extends PrinterDeviceId {
 
     private Integer vendorId;
     private Integer productId;
+    private Integer deviceId;
 
     public Integer getVendorId() {
         return vendorId;
@@ -17,9 +18,12 @@ public class USBPrinterDeviceId extends PrinterDeviceId {
         return productId;
     }
 
+    public Integer getDeviceId() {
+        return deviceId;
+    }
 
-    public static USBPrinterDeviceId valueOf(Integer vendorId, Integer productId) {
-        return new USBPrinterDeviceId(vendorId, productId);
+    public static USBPrinterDeviceId valueOf(Integer vendorId, Integer productId, Integer deviceId) {
+        return new USBPrinterDeviceId(vendorId, productId, deviceId);
     }
 
     @Override
@@ -42,8 +46,9 @@ public class USBPrinterDeviceId extends PrinterDeviceId {
         return result;
     }
 
-    private USBPrinterDeviceId(Integer vendorId, Integer productId){
+    private USBPrinterDeviceId(Integer vendorId, Integer productId, Integer deviceId){
         this.vendorId = vendorId;
         this.productId = productId;
+        this.deviceId = deviceId;
     }
 }

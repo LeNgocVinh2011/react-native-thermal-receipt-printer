@@ -68,14 +68,14 @@ export var USBPrinter = {
             return RNUSBPrinter.getDeviceList(function (printers) { return resolve(printers); }, function (error) { return reject(error); });
         });
     },
-    connectPrinter: function (vendorId, productId) {
+    connectPrinter: function (vendorId, productId, deviceId) {
         return new Promise(function (resolve, reject) {
-            return RNUSBPrinter.connectPrinter(vendorId, productId, function (printer) { return resolve(printer); }, function (error) { return reject(error); });
+            return RNUSBPrinter.connectPrinter(vendorId, productId, deviceId, function (printer) { return resolve(printer); }, function (error) { return reject(error); });
         });
     },
-    connectStampPrinter: function (vendorId, productId) {
+    connectStampPrinter: function (vendorId, productId, deviceId) {
         return new Promise(function (resolve, reject) {
-            return RNUSBPrinter.connectStampPrinter(vendorId, productId, function (printer) { return resolve(printer); }, function (error) { return reject(error); });
+            return RNUSBPrinter.connectStampPrinter(vendorId, productId, deviceId, function (printer) { return resolve(printer); }, function (error) { return reject(error); });
         });
     },
     closeConn: function () {
