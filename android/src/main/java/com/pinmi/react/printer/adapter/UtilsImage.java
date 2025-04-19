@@ -1,69 +1,44 @@
 package com.pinmi.react.printer.adapter;
 
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
+import android.graphics.Paint;
 
 public class UtilsImage {
-    public static Bitmap getBitmapResized(Bitmap image, float decreaseSizeBy, int imageWidth, int imageHeight) {
-        int imageWidthForResize = image.getWidth();
-        int imageHeightForResize = image.getHeight();
-        if (imageWidth > 0) {
-            if (imageWidthForResize > imageWidth) {
-                imageHeightForResize = (imageWidth * imageHeightForResize) / imageWidthForResize;
+    public static Bitmap resizeTheImageForPrinting(Bitmap original, int targetWidth, int imageHeight) {
+        float aspectRatio = (float) original.getHeight() / original.getWidth();
+        int targetHeight = (int) (targetWidth * aspectRatio);
+
+        Bitmap scaled = Bitmap.createScaledBitmap(original, targetWidth, targetHeight, true);
+        Bitmap bw = Bitmap.createBitmap(targetWidth, targetHeight, Bitmap.Config.ARGB_8888);
+
+        Canvas canvas = new Canvas(bw);
+        Paint paint = new Paint();
+        ColorMatrix cm = new ColorMatrix();
+        cm.setSaturation(0);
+        ColorMatrixColorFilter f = new ColorMatrixColorFilter(cm);
+        paint.setColorFilter(f);
+        canvas.drawBitmap(scaled, 0, 0, paint);
+
+        for (int y = 0; y < bw.getHeight(); y++) {
+            for (int x = 0; x < bw.getWidth(); x++) {
+                int color = bw.getPixel(x, y);
+                int r = Color.red(color);
+                int g = Color.green(color);
+                int b = Color.blue(color);
+                int gray = (r + g + b) / 3;
+                bw.setPixel(x, y, gray < 160 ? Color.BLACK : Color.WHITE);
             }
-            imageWidthForResize = imageWidth;
         }
 
-        if (imageHeight > 0) {
-            imageHeightForResize = imageHeight;
-        }
-        return Bitmap.createScaledBitmap(image, (int) (imageWidthForResize * decreaseSizeBy),
-                (int) (imageHeightForResize * decreaseSizeBy), true);
-    }
-
-    public static int getRGB(Bitmap bmpOriginal, int col, int row) {
-        // get one pixel color
-        int pixel = bmpOriginal.getPixel(col, row);
-        // retrieve color of all channels
-        int R = Color.red(pixel);
-        int G = Color.green(pixel);
-        int B = Color.blue(pixel);
-        return Color.rgb(R, G, B);
-    }
-
-    public static Bitmap resizeTheImageForPrinting(Bitmap image, int imageWidth, int imageHeight) {
-        // making logo size 150 or less pixels
-        int width = image.getWidth();
-        int height = image.getHeight();
-        if (Integer.toString(imageWidth) != null || Integer.toString(imageHeight) != null) {
-            return getBitmapResized(image, 1, imageWidth, imageHeight);
-        }
-        if (width > 200 || height > 200) {
-            float decreaseSizeBy;
-            if (width > height) {
-                decreaseSizeBy = (200.0f / width);
-            } else {
-                decreaseSizeBy = (200.0f / height);
-            }
-            return getBitmapResized(image, decreaseSizeBy, 0, 0);
-        }
-        return image;
+        return bw;
     }
 
     public static boolean shouldPrintColor(int col) {
-        final int threshold = 127;
-        int a, r, g, b, luminance;
-        a = (col >> 24) & 0xff;
-        if (a != 0xff) {// Ignore transparencies
-            return false;
-        }
-        r = (col >> 16) & 0xff;
-        g = (col >> 8) & 0xff;
-        b = col & 0xff;
-
-        luminance = (int) (0.299 * r + 0.587 * g + 0.114 * b);
-
-        return luminance < threshold;
+        return col == Color.BLACK;
     }
 
     public static byte[] recollectSlice(int y, int x, int[][] img) {
@@ -90,12 +65,23 @@ public class UtilsImage {
 
         int width = image.getWidth();
         int height = image.getHeight();
-        int[][] result = new int[height][width];
-        for (int row = 0; row < height; row++) {
-            for (int col = 0; col < width; col++) {
-                result[row][col] = getRGB(image, col, row);
+        int[][] pixels = new int[height][width];
+
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                int color = image.getPixel(x, y);
+
+                int r = Color.red(color);
+                int g = Color.green(color);
+                int b = Color.blue(color);
+                int gray = (r + g + b) / 3;
+
+                // Threshold
+                int bw = (gray < 160) ? Color.BLACK : Color.WHITE;
+                pixels[y][x] = bw;
             }
         }
-        return result;
+
+        return pixels;
     }
 }
