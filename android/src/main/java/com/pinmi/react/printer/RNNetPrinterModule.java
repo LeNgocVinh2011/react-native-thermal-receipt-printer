@@ -13,8 +13,10 @@ import com.pinmi.react.printer.adapter.NetPrinterDeviceId;
 import com.pinmi.react.printer.adapter.PrinterAdapter;
 import android.graphics.BitmapFactory;
 import android.graphics.Bitmap;
-import android.util.Base64;
+import android.net.Uri;
 
+import java.util.List;
+import java.io.InputStream;
 /**
  * Created by xiesubin on 2017/9/22.
  */
@@ -94,9 +96,17 @@ public class RNNetPrinterModule extends ReactContextBaseJavaModule implements RN
     @ReactMethod
     @Override
     public void printImageBase64(String base64, int imageWidth, int imageHeight, Callback errorCallback) {
-        byte[] decodedString = Base64.decode(base64, Base64.DEFAULT);
-        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-        adapter.printImageBase64(decodedByte, imageWidth, imageHeight, errorCallback);
+        try {
+            Uri uri = Uri.parse(base64);
+            InputStream inputStream = getReactApplicationContext().getContentResolver().openInputStream(uri);
+            if (inputStream != null) {
+                Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+                adapter.printImageBase64(bitmap, imageWidth, imageHeight, errorCallback);
+                inputStream.close();
+            }
+        } catch (Exception e) {
+            Log.e("printBase64", "Convert bitmap error");
+        }
     }
 
     @ReactMethod

@@ -14,10 +14,10 @@ import com.pinmi.react.printer.adapter.USBPrinterDeviceId;
 
 import android.graphics.BitmapFactory;
 import android.graphics.Bitmap;
-import android.util.Base64;
 import android.net.Uri;
 
 import java.util.List;
+import android.util.Log;
 import java.io.InputStream;
 
 /**
@@ -95,10 +95,11 @@ public class RNUSBPrinterModule extends ReactContextBaseJavaModule implements RN
             InputStream inputStream = getReactApplicationContext().getContentResolver().openInputStream(uri);
             if (inputStream != null) {
                 Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-                adapter.printImageBase64(decodedByte, imageWidth, imageHeight, errorCallback);
+                adapter.printImageBase64(bitmap, imageWidth, imageHeight, errorCallback);
                 inputStream.close();
             }
         } catch (Exception e) {
+            Log.e("printBase64", "Convert bitmap error");
         }
     }
 
