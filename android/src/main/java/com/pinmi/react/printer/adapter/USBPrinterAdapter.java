@@ -537,6 +537,8 @@ public class USBPrinterAdapter implements PrinterAdapter {
 
             mUsbDeviceConnection.bulkTransfer(mEndPoint, SET_LINE_SPACE_32, SET_LINE_SPACE_32.length, 100000);
             mUsbDeviceConnection.bulkTransfer(mEndPoint, LINE_FEED, LINE_FEED.length, 100000);
+            byte[] RESET_PRINTER = new byte[]{0x1B, 0x40};
+            mUsbDeviceConnection.bulkTransfer(mEndPoint, RESET_PRINTER, RESET_PRINTER.length, 100000);
         } else {
             String msg = "failed to connected to device";
             Log.v(LOG_TAG, msg);
