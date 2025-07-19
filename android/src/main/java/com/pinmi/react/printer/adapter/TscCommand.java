@@ -327,7 +327,7 @@ public class TscCommand {
 
     public void addPrint(int m, int n) {
         String str = new String();
-        str = "PRINT " + m + "," + n + "\r\n";
+        str = "DIRECTION " + DIRECTION.BACKWARD.getValue() + "\r\n" + "PRINT " + m + "," + n + "\r\n";
         addStrToCommand(str);
     }
 
