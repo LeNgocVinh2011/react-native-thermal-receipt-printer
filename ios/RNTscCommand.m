@@ -157,29 +157,56 @@ code:(NSString *) code
                            x,y,level,qrWidth,rotation,code]];
 }
 
--(void)addBitmap:(NSInteger) x y:(NSInteger) y
-bitmapMode:(NSInteger) mode width:(NSInteger) nWidth
-bitmap:(UIImage *) b{
-    //todo: NEED TO IMPLEMENT>>>>>>
-    if (b) {
-        CGFloat imgWidth = b.size.width;
-        CGFloat imgHeigth = b.size.height;
-        NSInteger width = (nWidth + 7) / 8 * 8;
-        NSInteger height = imgHeigth * width / imgWidth;
-        UIImage *resized = [ImageUtils imageWithImage:b scaledToFillSize:CGSizeMake(width, height)];
-        uint8_t * graybits = [ImageUtils imageToGreyImage:resized];
-        NSInteger srcLen = (int)resized.size.width*resized.size.height;
-        NSData *codecontent = [ImageUtils pixToTscCmd:graybits width:srcLen];
-        height = srcLen / width;
-        width /= 8;
-        NSString *str =[NSString stringWithFormat:@ "BITMAP %ld,%ld,%ld,%ld,%ld,",
-                        x,y,width,height,mode];
-        [self addStrToCommand:str];
-        [_command appendData:codecontent];
-        [self addStrToCommand:@"\r\n"];
+-(void)addBitmap:(NSInteger)x
+               y:(NSInteger)y
+     bitmapMode:(NSInteger)mode
+           width:(NSInteger)nWidth
+          bitmap:(UIImage *)b
+{
+    if (!b) {
+        return;
     }
-    
+
+    CGImageRef cg = b.CGImage;
+
+    size_t imageWidth = CGImageGetWidth(cg);
+    size_t imageHeight = CGImageGetHeight(cg);
+
+    NSInteger pixelWidth = ((nWidth + 7) / 8) * 8;
+    NSInteger pixelHeight = imageHeight * pixelWidth / imageWidth;
+
+    UIImage *resized =
+    [ImageUtils imageWithImage:b
+              scaledToFillSize:CGSizeMake(pixelWidth, pixelHeight)];
+
+    uint8_t *bwBits =
+    [ImageUtils bitmapToBWPix:resized];
+
+    NSInteger srcLen = pixelWidth * pixelHeight;
+
+    NSData *codeContent =
+    [ImageUtils pixToTscCmd:bwBits
+                      width:srcLen];
+
+    free(bwBits);
+
+    NSInteger bitmapWidth = pixelWidth / 8;
+    NSInteger bitmapHeight = pixelHeight;
+
+    NSString *cmd =
+    [NSString stringWithFormat:
+     @"BITMAP %ld,%ld,%ld,%ld,%ld,",
+     (long)x,
+     (long)y,
+     (long)bitmapWidth,
+     (long)bitmapHeight,
+     (long)mode];
+
+    [self addStrToCommand:cmd];
+    [_command appendData:codeContent];
+    [self addStrToCommand:@"\r\n"];
 }
+
 -(void)addBox:(NSInteger) x y:(NSInteger) y xend:(NSInteger) xend yend:(NSInteger) yend
 {
     [self addStrToCommand:[NSString stringWithFormat:@"BAR %ld,%ld,%ld,%ld\r\n",
