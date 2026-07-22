@@ -334,6 +334,8 @@ RCT_EXPORT_METHOD(printLabelOptions:(NSDictionary *) options
                   fail:(RCTResponseSenderBlock)errorCallback)
 {
      @try {
+        !connected_ip ? [NSException raise:@"Invalid connection" format:@"Can't connect to printer"] : nil;
+
         NSInteger width = [[options valueForKey:@"width"] integerValue];
         NSInteger height = [[options valueForKey:@"height"] integerValue];
         NSInteger gap = [[options valueForKey:@"gap"] integerValue];
@@ -384,7 +386,8 @@ RCT_EXPORT_METHOD(printLabelOptions:(NSDictionary *) options
 
         [tsc addPrint:1 n:1];
         NSData *toPrint = tsc.command;
-        !connected_ip ? [NSException raise:@"Invalid connection" format:@"Can't connect to printer"] : nil;
+        NSString *stringToPrint = [[NSString alloc] initWithData:toPrint encoding:NSUTF8StringEncoding];
+        [[PrinterSDK defaultPrinterSDK] printText:text];
     } @catch (NSException *exception) {
         errorCallback(@[exception.reason]);
     }
