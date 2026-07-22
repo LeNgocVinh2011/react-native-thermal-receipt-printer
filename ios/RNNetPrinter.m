@@ -330,6 +330,20 @@ RCT_EXPORT_METHOD(printQrCode:(NSString *)qrCode
     }
 }
 
+- (NSString *)hexStringFromData:(NSData *)data {
+    const unsigned char *dataBuffer = (const unsigned char *)[data bytes];
+    if (!dataBuffer) return @"";
+
+    NSUInteger dataLength = [data length];
+    NSMutableString *hexString = [NSMutableString stringWithCapacity:(dataLength * 2)];
+
+    for (int i = 0; i < dataLength; ++i) {
+        [hexString appendFormat:@"%02X", (unsigned int)dataBuffer[i]];
+    }
+
+    return [NSString stringWithString:hexString];
+}
+
 RCT_EXPORT_METHOD(printLabelOptions:(NSDictionary *) options
                   fail:(RCTResponseSenderBlock)errorCallback)
 {
@@ -386,8 +400,8 @@ RCT_EXPORT_METHOD(printLabelOptions:(NSDictionary *) options
 
         [tsc addPrint:1 n:1];
         NSData *toPrint = tsc.command;
-        NSString *stringToPrint = [[NSString alloc] initWithData:toPrint encoding:NSUTF8StringEncoding];
-        [[PrinterSDK defaultPrinterSDK] printText:text];
+        NSString *hexData = [self hexStringFromData:toPrint];
+        [[PrinterSDK defaultPrinterSDK] sendHex:hexData];
     } @catch (NSException *exception) {
         errorCallback(@[exception.reason]);
     }
