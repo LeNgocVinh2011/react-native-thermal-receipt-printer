@@ -76,14 +76,14 @@ public class RNNetPrinterModule extends ReactContextBaseJavaModule implements RN
 
     @ReactMethod
     @Override
-    public void printRawData(String base64Data, Callback errorCallback) {
-        adapter.printRawData(base64Data, errorCallback);
+    public void printRawData(String base64Data, final Callback errorCallback, final Callback successCallback) {
+        adapter.printRawData(base64Data, errorCallback, successCallback);
     }
 
     @ReactMethod
     @Override
-    public void printLabelOptions(final ReadableMap options, Callback errorCallback) {
-        adapter.printLabelOptions(options, errorCallback);
+    public void printLabelOptions(final ReadableMap options, final Callback errorCallback, final Callback successCallback) {
+        adapter.printLabelOptions(options, errorCallback, successCallback);
     }
 
     @ReactMethod
@@ -95,13 +95,13 @@ public class RNNetPrinterModule extends ReactContextBaseJavaModule implements RN
 
     @ReactMethod
     @Override
-    public void printImageBase64(String base64, int imageWidth, int imageHeight, Callback errorCallback) {
+    public void printImageBase64(String base64, int imageWidth, int imageHeight, final Callback errorCallback, final Callback successCallback) {
         try {
             Uri uri = Uri.parse(base64);
             InputStream inputStream = getReactApplicationContext().getContentResolver().openInputStream(uri);
             if (inputStream != null) {
                 Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-                adapter.printImageBase64(bitmap, imageWidth, imageHeight, errorCallback);
+                adapter.printImageBase64(bitmap, imageWidth, imageHeight, errorCallback, successCallback);
                 inputStream.close();
             }
         } catch (Exception e) {

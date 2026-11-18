@@ -29,13 +29,13 @@ public interface PrinterAdapter {
     public void closeConnectionIfExists();
     public void closeConnectionStampIfExists();
 
-    public void printRawData(String rawBase64Data, Callback errorCallback);
+    public void printRawData(String rawBase64Data, final Callback errorCallback, final Callback successCallback);
 
-    public void printLabelOptions(final ReadableMap options, Callback errorCallback);
+    public void printLabelOptions(final ReadableMap options, final Callback errorCallback, final Callback successCallback);
 
     public void printImageData(String imageUrl, int imageWidth, int imageHeight, Callback errorCallback);
 
-    public void printImageBase64(Bitmap imageUrl, int imageWidth, int imageHeight, Callback errorCallback);
+    public void printImageBase64(Bitmap imageUrl, int imageWidth, int imageHeight, final Callback errorCallback, final Callback successCallback);
 
     public void printQrCode(String qrCode, Callback errorCallback);
 }

@@ -93,12 +93,12 @@ export declare const NetPrinter: {
     connectStampPrinter: (host: string, port: number) => Promise<INetPrinter>;
     closeConn: () => Promise<void>;
     closeConnectionStampIfExists: () => Promise<void>;
-    printText: (text: string, opts?: {}) => void;
-    printBill: (text: string, opts?: {}) => void;
+    printText: (text: string, opts?: {}) => Promise<void>;
+    printBill: (text: string, opts?: {}) => Promise<void>;
     printImage: (imgUrl: string, opts?: {}) => void;
-    printImageBase64: (Base64: string, opts?: {}) => void;
+    printImageBase64: (Base64: string, opts?: {imageWidth?: number; imageHeight?: number}) => Promise<void>;
     printLabel: (rawLabel: string, opts?: {}) => void;
-    printLabelOptions: (options: PrintLabelOptions) => void;
+    printLabelOptions: (options: PrintLabelOptions) => Promise<void>;
     // printQrCode: (qrCode: string, opts?: {}) => void;
 };
 export declare const NetPrinterEventEmitter: NativeEventEmitter;

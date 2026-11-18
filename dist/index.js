@@ -249,27 +249,29 @@ export var NetPrinter = {
     },
     printText: function (text, opts) {
         if (opts === void 0) { opts = {}; }
-        if (Platform.OS === "ios") {
-            var processedText = textPreprocessingIOS(text, true);
-            RNNetPrinter.printRawData(processedText.text, processedText.opts, function (error) { return console.warn(error); });
-        }
-        else {
-            RNNetPrinter.printRawData(textTo64Buffer(text, opts), function (error) {
-                return console.warn(error);
-            });
-        }
+        return new Promise(function (resolve, reject) {
+            var onError = function (error) { reject(new Error(String(error))); };
+            var onSuccess = function () { resolve(); };
+            if (Platform.OS === "ios") {
+                var processedText = textPreprocessingIOS(text, true);
+                RNNetPrinter.printRawData(processedText.text, processedText.opts, onError, onSuccess);
+            } else {
+                RNNetPrinter.printRawData(textTo64Buffer(text, opts), onError, onSuccess);
+            }
+        });
     },
     printBill: function (text, opts) {
         if (opts === void 0) { opts = {}; }
-        if (Platform.OS === "ios") {
-            var processedText = textPreprocessingIOS(text, true);
-            RNNetPrinter.printRawData(processedText.text, processedText.opts, function (error) { return console.warn(error); });
-        }
-        else {
-            RNNetPrinter.printRawData(billTo64Buffer(text, opts), function (error) {
-                return console.warn(error);
-            });
-        }
+        return new Promise(function (resolve, reject) {
+            var onError = function (error) { reject(new Error(String(error))); };
+            var onSuccess = function () { resolve(); };
+            if (Platform.OS === "ios") {
+                var processedText = textPreprocessingIOS(text, true);
+                RNNetPrinter.printRawData(processedText.text, processedText.opts, onError, onSuccess);
+            } else {
+                RNNetPrinter.printRawData(billTo64Buffer(text, opts), onError, onSuccess);
+            }
+        });
     },
     printImage: function (imgUrl, opts) {
         var _a, _b;
@@ -297,35 +299,30 @@ export var NetPrinter = {
     },
     printImageBase64: function (Base64, opts) {
         var _a, _b;
-        if (opts === void 0) {
-            opts = {};
-        }
-        if (Platform.OS === "ios") {
-            RNNetPrinter.printImageBase64(Base64, opts, function (error) {
-                return console.warn(error);
-            });
-        } else {
-            RNNetPrinter.printImageBase64(
-                Base64,
-                (_a = opts === null || opts === void 0 ? void 0 : opts.imageWidth) !==
-                null && _a !== void 0
-                    ? _a
-                    : 0,
-                (_b = opts === null || opts === void 0 ? void 0 : opts.imageHeight) !==
-                null && _b !== void 0
-                    ? _b
-                    : 0,
-                function (error) {
-                    return console.warn(error);
-                }
-            );
-        }
+        if (opts === void 0) { opts = {}; }
+        return new Promise(function (resolve, reject) {
+            var onError = function (error) { reject(new Error(String(error))); };
+            var onSuccess = function () { resolve(); };
+            if (Platform.OS === "ios") {
+                RNNetPrinter.printImageBase64(Base64, opts, onError, onSuccess);
+            } else {
+                RNNetPrinter.printImageBase64(
+                    Base64,
+                    (_a = opts === null || opts === void 0 ? void 0 : opts.imageWidth) !== null && _a !== void 0 ? _a : 0,
+                    (_b = opts === null || opts === void 0 ? void 0 : opts.imageHeight) !== null && _b !== void 0 ? _b : 0,
+                    onError,
+                    onSuccess
+                );
+            }
+        });
     },
     printLabelOptions: function (options) {
-        RNNetPrinter.printLabelOptions(options, function (error) {
-                return console.warn(error);
-            }
-        );
+        return new Promise(function (resolve, reject) {
+            RNNetPrinter.printLabelOptions(options,
+                function (error) { reject(new Error(String(error))); },
+                function () { resolve(); }
+            );
+        });
     },
     // printQrCode: function (qrCode, opts) {
     //     if (opts === void 0) { opts = {}; }

@@ -321,7 +321,7 @@ public class USBPrinterAdapter implements PrinterAdapter {
     }
 
 
-    public void printRawData(String data, Callback errorCallback) {
+    public void printRawData(String data, final Callback errorCallback, final Callback successCallback) {
         final String rawData = data;
         Log.v(LOG_TAG, "start to print raw data " + data);
         boolean isConnected = openConnection();
@@ -414,7 +414,7 @@ public class USBPrinterAdapter implements PrinterAdapter {
     }
 
     @Override
-    public void printLabelOptions(final ReadableMap options, Callback errorCallback) {
+    public void printLabelOptions(final ReadableMap options, final Callback errorCallback, final Callback successCallback) {
         Log.v(LOG_TAG, "start to print label");
         boolean isConnected = openStampConnection();
         if (isConnected) {
@@ -498,7 +498,7 @@ public class USBPrinterAdapter implements PrinterAdapter {
     }
 
     @Override
-    public void printImageBase64(final Bitmap bitmapImage, int imageWidth, int imageHeight, Callback errorCallback) {
+    public void printImageBase64(final Bitmap bitmapImage, int imageWidth, int imageHeight, final Callback errorCallback, final Callback successCallback) {
         if(bitmapImage == null) {
             errorCallback.invoke("image not found");
             return;

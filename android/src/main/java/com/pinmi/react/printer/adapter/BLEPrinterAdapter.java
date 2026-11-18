@@ -215,7 +215,7 @@ public class BLEPrinterAdapter implements PrinterAdapter{
     }
 
     @Override
-    public void printRawData(String rawBase64Data, Callback errorCallback) {
+    public void printRawData(String rawBase64Data, final Callback errorCallback, final Callback successCallback) {
         if(this.mBluetoothSocket == null){
             errorCallback.invoke("bluetooth connection is not built, may be you forgot to connectPrinter");
             return;
@@ -241,7 +241,7 @@ public class BLEPrinterAdapter implements PrinterAdapter{
     }
 
     @Override
-    public void printLabelOptions(final ReadableMap options, Callback errorCallback) {}
+    public void printLabelOptions(final ReadableMap options, final Callback errorCallback, final Callback successCallback) {}
 
     @Override
     public void selectStampDevice(PrinterDeviceId printerDeviceId, Callback sucessCallback, Callback errorCallback) {}
@@ -319,7 +319,7 @@ public class BLEPrinterAdapter implements PrinterAdapter{
     }
 
     @Override
-    public void printImageBase64(final Bitmap bitmapImage, int imageWidth, int imageHeight, Callback errorCallback) {}
+    public void printImageBase64(final Bitmap bitmapImage, int imageWidth, int imageHeight, final Callback errorCallback, final Callback successCallback) {}
 
     @Override
     public void printQrCode(String qrCode, Callback errorCallback) {

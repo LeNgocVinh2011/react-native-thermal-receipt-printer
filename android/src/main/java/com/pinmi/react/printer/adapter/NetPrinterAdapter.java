@@ -276,7 +276,7 @@ public class NetPrinterAdapter implements PrinterAdapter {
     }
 
     @Override
-    public void printRawData(String rawBase64Data, Callback errorCallback) {
+    public void printRawData(String rawBase64Data, final Callback errorCallback, final Callback successCallback) {
         if (this.mSocket == null) {
             errorCallback.invoke("bluetooth connection is not built, may be you forgot to connectPrinter");
             return;
@@ -292,17 +292,17 @@ public class NetPrinterAdapter implements PrinterAdapter {
                     OutputStream printerOutputStream = socket.getOutputStream();
                     printerOutputStream.write(bytes, 0, bytes.length);
                     printerOutputStream.flush();
-                    closeConnectionIfExists();
-                } catch (IOException e) {
-                    Log.e(LOG_TAG, "failed to print data" + rawData);
-                    e.printStackTrace();
+                    successCallback.invoke();
+                } catch (Exception e) {
+                    Log.e(LOG_TAG, "failed to print data", e);
+                    errorCallback.invoke(e.getMessage() != null ? e.getMessage() : "Failed to print raw data");
                 }
             }
         }).start();
     }
 
     @Override
-    public void printLabelOptions(final ReadableMap options, Callback errorCallback) {
+    public void printLabelOptions(final ReadableMap options, final Callback errorCallback, final Callback successCallback) {
         if (this.mStampSocket == null) {
             errorCallback.invoke("network connection is not built, may be you forgot to connectPrinter");
             return;
@@ -344,7 +344,8 @@ public class NetPrinterAdapter implements PrinterAdapter {
                             String temStr = new String(temp, "UTF-8");
                             t = new String(temStr.getBytes("GB2312"), "GB2312");
                         } catch (Exception e) {
-                            Log.e(LOG_TAG, "Text error");
+                            Log.e(LOG_TAG, "Text error", e);
+                            errorCallback.invoke("Text error: " + e.getMessage());
                             return;
                         }
 
@@ -380,9 +381,10 @@ public class NetPrinterAdapter implements PrinterAdapter {
                     OutputStream printerOutputStream = socket.getOutputStream();
                     printerOutputStream.write(tosend);
                     printerOutputStream.flush();
-                } catch (IOException e) {
-                    Log.e(LOG_TAG, "failed to print label");
-                    e.printStackTrace();
+                    successCallback.invoke();
+                } catch (Exception e) {
+                    Log.e(LOG_TAG, "failed to print label", e);
+                    errorCallback.invoke(e.getMessage() != null ? e.getMessage() : "Failed to print label");
                 }
             }
         }).start();
@@ -456,7 +458,7 @@ public class NetPrinterAdapter implements PrinterAdapter {
     }
 
     @Override
-    public void printImageBase64(final Bitmap bitmapImage, int imageWidth, int imageHeight, Callback errorCallback) {
+    public void printImageBase64(final Bitmap bitmapImage, int imageWidth, int imageHeight, final Callback errorCallback, final Callback successCallback) {
         if (bitmapImage == null) {
             errorCallback.invoke("image not found");
             return;
@@ -496,9 +498,10 @@ public class NetPrinterAdapter implements PrinterAdapter {
             printerOutputStream.write(LINE_FEED);
 
             printerOutputStream.flush();
-        } catch (IOException e) {
-            Log.e(LOG_TAG, "failed to print data");
-            e.printStackTrace();
+            successCallback.invoke();
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "failed to print data", e);
+            errorCallback.invoke(e.getMessage() != null ? e.getMessage() : "Failed to print image");
         }
     }
 
